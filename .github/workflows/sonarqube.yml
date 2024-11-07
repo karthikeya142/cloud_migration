@@ -23,8 +23,7 @@
 
 # Feel free to take a look at our documentation (https://docs.sonarqube.org/latest/analysis/github-integration/)
 # or reach out to our community forum if you need some help (https://community.sonarsource.com/c/sq/10)
-
-name: SonarQube analysis
+name: Terraform SonarQube Analysis
 
 on:
   push:
@@ -34,10 +33,10 @@ on:
   workflow_dispatch:
 
 permissions:
-  pull-requests: read # allows SonarQube to decorate PRs with analysis results
+  pull-requests: read  # Allows SonarQube to decorate PRs with analysis results
 
 jobs:
-  Analysis:
+  terraform-sonarqube-analysis:
     runs-on: ubuntu-latest
 
     steps:
@@ -49,25 +48,31 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Analyze with SonarQube
 
-        # You can pin the exact commit or the version.
-        # uses: SonarSource/sonarqube-scan-action@v1.1.0
+      - name: Run SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
         env:
-          GITHUB_TOKEN: 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  # Needed to get PR information
+           GITHUB_TOKEN: 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  # Needed to get PR information
           SONAR_TOKEN: 8224eb91eeb8c8bba60d2abe9373ffc68bb764ee  # Generate a token on SonarQube, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
-          SONAR_HOST_URL: https://sonarcloud.io   # add the URL of your instance to the secrets of this repo with the name SONAR_HOST_URL (Settings > Secrets > Actions > add new repository secret)
+          SONAR_HOST_URL: https://sonarcloud.io
         with:
+          args: |
+            -Dsonar.organization=karthikeya142
+            -Dsonar.projectKey=karthikeya142_cloud_migration
+            -Dsonar.sources=.
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+            -Dsonar.language=terraform
+            -Dsonar.exclusions=**/*.md
+
+        
+            # add the URL of your instance to the secrets of this repo with the name SONAR_HOST_URL (Settings > Secrets > Actions > add new repository secret)
+       
           # Additional arguments for the sonarcloud scanner
-          args:
+         
             # Unique key of your project. You can find it in SonarQube > [my project] > Project Information (top-right menu)
             # mandatory
             
-            -Dsonar.organization=karthikeya142 
-            -Dsonar.projectKey=karthikeya142_cloud_migration 
-            -Dsonar.sources=. 
-            -Dsonar.host.url=https://sonarcloud.io
+            
             # Comma-separated paths to directories containing main source files.
             #-Dsonar.sources= # optional, default is project base directory
             # When you need the analysis to take place in a directory other than the one from which it was launched
