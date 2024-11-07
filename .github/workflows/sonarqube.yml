@@ -28,9 +28,9 @@ jobs:
       - name: Run SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
         env:
-           GITHUB_TOKEN: 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  
-           SONAR_TOKEN: 8224eb91eeb8c8bba60d2abe9373ffc68bb764ee 
-           SONAR_HOST_URL: https://sonarcloud.io
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token from secrets
+           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # SonarQube token from secrets
+           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} 
         with:
           args: |
             -Dsonar.organization=karthikeya142
