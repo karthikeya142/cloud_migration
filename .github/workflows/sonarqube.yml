@@ -55,8 +55,7 @@ jobs:
           args:
             # Unique key of your project. You can find it in SonarQube > [my project] > Project Information (top-right menu)
             # mandatory
-            -Dsonar.projectKey=    
-                          sonar-scanner \
+            
             -Dsonar.organization=karthikeya142 \
             -Dsonar.projectKey=karthikeya142_cloud_migration \
             -Dsonar.sources=. \
